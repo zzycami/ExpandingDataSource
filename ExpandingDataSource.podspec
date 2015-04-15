@@ -13,7 +13,7 @@ s.author       = { "zzycami" => "zzycami@foxmail.com" }
 s.platform     = :ios, '7.0'
 
 s.source       = { :git => "https://github.com/zzycami/ExpandingDataSource.git", :tag => s.version.to_s }
-s.source_files  = 'Class/*.{h,m}'
+s.source_files  = 'ExpandingDataSource/Class/*.{h,m}'
 
 s.frameworks   = 'Foundation', 'UIKit'
 end
