@@ -95,7 +95,7 @@
                 [self tableView:tableView didShrinkedRowCell:expandingCell];
             }
         }
-        [tableView deleteRowsAtIndexPaths:@[theExpandedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [tableView deleteRowsAtIndexPaths:@[theExpandedIndexPath] withRowAnimation:UITableViewRowAnimationRight];
         
     }
     if (self.expandedIndexPath) {
@@ -105,7 +105,7 @@
                 [self tableView:tableView didExpandedRowAtCell:cell];
             }
         }
-        [tableView insertRowsAtIndexPaths:@[self.expandedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [tableView insertRowsAtIndexPaths:@[self.expandedIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
     }
     
     [tableView endUpdates];
