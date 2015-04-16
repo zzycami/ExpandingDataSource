@@ -18,10 +18,15 @@
 @synthesize expandingIndexPath = _expandingIndexPath;
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.expandedIndexPath) {
-        return [self expandingTableView:tableView numberOfRowsInSection:section] + 1;
+    NSInteger expandingCount = [self expandingTableView:tableView numberOfRowsInSection:section];
+    if (expandingCount == 0) {
+        // If the list is empty, the expanded item is no longer exist.
+        return 0;
     }
-    return [self expandingTableView:tableView numberOfRowsInSection:section];
+    if (self.expandedIndexPath) {
+        return expandingCount + 1;
+    }
+    return expandingCount;
 }
 
 - (NSInteger) expandingTableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -29,9 +34,17 @@
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    // When table view delete the last item, should update the expanded index path
+    NSInteger expandingCount = [self expandingTableView:tableView numberOfRowsInSection:indexPath.section];
+    if (self.expandedIndexPath.row > expandingCount) {
+        self.expandedIndexPath = [NSIndexPath indexPathForRow:expandingCount inSection:[indexPath section]];
+        self.expandingIndexPath = [NSIndexPath indexPathForRow:expandingCount - 1 inSection:[indexPath section]];
+    }
+    
     if ([indexPath isEqual:self.expandedIndexPath]) {
-        return [self expandedTableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[indexPath row] - 1 inSection:[indexPath section]]];
+        return [self expandedTableView:tableView cellForRowAtIndexPath:self.expandingIndexPath];
     }else {
+        indexPath = [self actualIndexPathForTappedIndexPath:indexPath];
         return [self expandingTableView:tableView cellForRowAtIndexPath:indexPath];
     }
 }
