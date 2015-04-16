@@ -37,6 +37,7 @@
 - (UITableViewCell*) expandedTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)expandedIndexPath {
     ExtendedTableViewCell* cell = (ExtendedTableViewCell*)[tableView dequeueReusableCellWithIdentifier:ExpandedCellIdentifier];
     cell.onLeftButtonClicked = ^() {
+        
         NSLog(@"clicked left button at row:%d", (int)expandedIndexPath.row);
     };
     
@@ -45,5 +46,22 @@
     };
     return cell;
 }
+
+- (CGFloat) expandedTableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50;
+}
+
+- (CGFloat) expandingTableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 80;
+}
+
+- (void) tableView:(UITableView *)tableView didExpandedRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"expand row at %d", indexPath.row);
+}
+
+- (void) tableView:(UITableView *)tableView didShrinkedRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"shrink row at %d", indexPath.row);
+}
+
 
 @end

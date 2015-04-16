@@ -18,10 +18,8 @@ static NSString* ExpandingCellIdentifier = @"ExpandingCellIdentifier";
  */
 static NSString* ExpandedCellIdentifier = @"ExpandedCellIdentifier";
 
-/**
- *  If you want your table view have a expend view. you can extends @c ExpandingDataSource, This class finished all the expend logical, you can just care about the appearence and event of your main cell and expend cell.
- */
-@interface ExpandingDataSource : NSObject<UITableViewDataSource, UITableViewDelegate>
+
+@protocol ExpandingDataSourceProtocol <NSObject>
 /**
  *  The same function to tableView:numberOfRowsInSection:, but you should implement expandingTableView:numberOfRowsInSection: instead of the normal one
  *
@@ -52,6 +50,7 @@ static NSString* ExpandedCellIdentifier = @"ExpandedCellIdentifier";
  */
 - (UITableViewCell*) expandedTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *) expandedIndexPath;
 
+@optional
 /**
  *  Delegate to call when select the expanding cell
  *
@@ -67,4 +66,48 @@ static NSString* ExpandedCellIdentifier = @"ExpandedCellIdentifier";
  *  @param indexPath
  */
 - (void) expandedTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+
+/**
+ *  When table view expand, this method will be callled.
+ *
+ *  @param tableView
+ *  @param indexPath the index path of expanding cell.
+ */
+- (void) tableView:(UITableView *)tableView didExpandedRowAtIndexPath:(NSIndexPath*) indexPath;
+
+/**
+ *  When table view shrink, this method will be called
+ *
+ *  @param tableView
+ *  @param indexPath the index path of shrinking cell.
+ */
+- (void) tableView:(UITableView *)tableView didShrinkedRowAtIndexPath:(NSIndexPath *)indexPath;
+
+/**
+ *  Cell height for the expanding cell
+ *
+ *  @param tableView
+ *  @param indexPath Index path of cell in table view
+ *
+ *  @return Cell height
+ */
+- (CGFloat) expandingTableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+/**
+ *  Cell height for the expanded cell
+ *
+ *  @param tableView
+ *  @param indexPath Index path of cell in table view
+ *
+ *  @return Cell height
+ */
+- (CGFloat) expandedTableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
+/**
+ *  If you want your table view have a expend view. you can extends @c ExpandingDataSource, This class finished all the expend logical, you can just care about the appearence and event of your main cell and expend cell.
+ */
+@interface ExpandingDataSource : NSObject<UITableViewDataSource, UITableViewDelegate, ExpandingDataSourceProtocol>
+
 @end

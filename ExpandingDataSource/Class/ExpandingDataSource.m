@@ -49,7 +49,9 @@
     // disable touch on expanded cell
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([cell.reuseIdentifier isEqualToString:ExpandedCellIdentifier]) {
-        [self expandedTableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:[indexPath row] - 1 inSection:[indexPath section]]];
+        if ([self respondsToSelector:@selector(expandedTableView:didSelectRowAtIndexPath:)]) {
+            [self expandedTableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:[indexPath row] - 1 inSection:[indexPath section]]];
+        }
         return;
     }
     // deselect row
@@ -74,9 +76,15 @@
     
     if (theExpandedIndexPath) {
         [tableView deleteRowsAtIndexPaths:@[theExpandedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        if ([self respondsToSelector:@selector(tableView:didShrinkedRowAtIndexPath:)]) {
+            [self tableView:tableView didShrinkedRowAtIndexPath:[NSIndexPath indexPathForRow:[theExpandedIndexPath row] - 1 inSection:[theExpandedIndexPath section]]];
+        }
     }
     if (self.expandedIndexPath) {
         [tableView insertRowsAtIndexPaths:@[self.expandedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        if ([self respondsToSelector:@selector(tableView:didExpandedRowAtIndexPath:)]) {
+            [self tableView:tableView didExpandedRowAtIndexPath:[NSIndexPath indexPathForRow:[self.expandedIndexPath row] - 1 inSection:[self.expandedIndexPath section]]];
+        }
     }
     
     [tableView endUpdates];
@@ -85,7 +93,9 @@
     [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     
     // trigger the normal select event
-    [self expandingTableView:tableView didSelectRowAtIndexPath:indexPath];
+    if ([self respondsToSelector:@selector(expandingTableView:didSelectRowAtIndexPath:)]) {
+        [self expandingTableView:tableView didSelectRowAtIndexPath:indexPath];
+    }
 }
 
 - (NSIndexPath *)actualIndexPathForTappedIndexPath:(NSIndexPath *)indexPath {
@@ -95,10 +105,19 @@
     return indexPath;
 }
 
-- (void) expandingTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath isEqual:self.expandedIndexPath]) {
+        return [self expandedTableView:tableView heightForRowAtIndexPath:indexPath];
+    }else {
+        return [self expandingTableView:tableView heightForRowAtIndexPath:indexPath];
+    }
 }
 
-- (void) expandedTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat) expandedTableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 44;
 }
 
+- (CGFloat) expandingTableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 44;
+}
 @end
