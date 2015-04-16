@@ -62,6 +62,7 @@
     
     // save the expanded cell to delete it later
     NSIndexPath *theExpandedIndexPath = self.expandedIndexPath;
+    NSIndexPath *theExpandingIndexPath = self.expandingIndexPath;
     
     if ([indexPath isEqual:self.expandingIndexPath]) {
         self.expandingIndexPath = nil;
@@ -75,16 +76,23 @@
     [tableView beginUpdates];
     
     if (theExpandedIndexPath) {
-        [tableView deleteRowsAtIndexPaths:@[theExpandedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-        if ([self respondsToSelector:@selector(tableView:didShrinkedRowAtIndexPath:)]) {
-            [self tableView:tableView didShrinkedRowAtIndexPath:[NSIndexPath indexPathForRow:[theExpandedIndexPath row] - 1 inSection:[theExpandedIndexPath section]]];
+        if ([self respondsToSelector:@selector(tableView:didShrinkedRowCell:)]) {
+            UITableViewCell* expandingCell = [tableView cellForRowAtIndexPath:theExpandingIndexPath];
+            if (expandingCell && [expandingCell.reuseIdentifier isEqualToString:ExpandingCellIdentifier]) {
+                [self tableView:tableView didShrinkedRowCell:expandingCell];
+            }
         }
+        [tableView deleteRowsAtIndexPaths:@[theExpandedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        
     }
     if (self.expandedIndexPath) {
-        [tableView insertRowsAtIndexPaths:@[self.expandedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-        if ([self respondsToSelector:@selector(tableView:didExpandedRowAtIndexPath:)]) {
-            [self tableView:tableView didExpandedRowAtIndexPath:[NSIndexPath indexPathForRow:[self.expandedIndexPath row] - 1 inSection:[self.expandedIndexPath section]]];
+        if ([self respondsToSelector:@selector(tableView:didExpandedRowAtCell:)]) {
+            //UITableViewCell* expandingCell = [tableView cellForRowAtIndexPath:self.expandingIndexPath];
+            if (cell && [cell.reuseIdentifier isEqualToString:ExpandingCellIdentifier]) {
+                [self tableView:tableView didExpandedRowAtCell:cell];
+            }
         }
+        [tableView insertRowsAtIndexPaths:@[self.expandedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
     
     [tableView endUpdates];

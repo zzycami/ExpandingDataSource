@@ -55,12 +55,12 @@
     return 80;
 }
 
-- (void) tableView:(UITableView *)tableView didExpandedRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"expand row at %d", indexPath.row);
+- (void) tableView:(UITableView *)tableView didExpandedRowAtCell:(UITableViewCell *)cell {
+    NSLog(@"%@", cell.textLabel.text);
 }
 
-- (void) tableView:(UITableView *)tableView didShrinkedRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"shrink row at %d", indexPath.row);
+- (void) tableView:(UITableView *)tableView didShrinkedRowCell:(UITableViewCell *)cell{
+    NSLog(@"%@", cell.textLabel.text);
 }
 
 

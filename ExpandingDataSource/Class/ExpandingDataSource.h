@@ -73,7 +73,7 @@ static NSString* ExpandedCellIdentifier = @"ExpandedCellIdentifier";
  *  @param tableView
  *  @param indexPath the index path of expanding cell.
  */
-- (void) tableView:(UITableView *)tableView didExpandedRowAtIndexPath:(NSIndexPath*) indexPath;
+- (void) tableView:(UITableView *)tableView didExpandedRowAtCell:(UITableViewCell*) cell;
 
 /**
  *  When table view shrink, this method will be called
@@ -81,7 +81,7 @@ static NSString* ExpandedCellIdentifier = @"ExpandedCellIdentifier";
  *  @param tableView
  *  @param indexPath the index path of shrinking cell.
  */
-- (void) tableView:(UITableView *)tableView didShrinkedRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void) tableView:(UITableView *)tableView didShrinkedRowCell:(UITableViewCell *)cell;
 
 /**
  *  Cell height for the expanding cell
