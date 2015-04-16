@@ -109,5 +109,10 @@ static NSString* ExpandedCellIdentifier = @"ExpandedCellIdentifier";
  *  If you want your table view have a expend view. you can extends @c ExpandingDataSource, This class finished all the expend logical, you can just care about the appearence and event of your main cell and expend cell.
  */
 @interface ExpandingDataSource : NSObject<UITableViewDataSource, UITableViewDelegate, ExpandingDataSourceProtocol>
-
+/**
+ *  Shink current expanded row
+ *
+ *  @param tableView The tableView that whick this dataSource' owner.
+ */
+- (void) shinkCurrentSelectAtTableView:(UITableView*) tableView;
 @end

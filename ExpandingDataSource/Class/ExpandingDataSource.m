@@ -57,6 +57,26 @@
     return nil;
 }
 
+- (void) shinkCurrentSelectAtTableView:(UITableView*) tableView {
+    NSInteger expandingCount = [self expandingTableView:tableView numberOfRowsInSection:self.expandedIndexPath.section];
+    if (expandingCount > 0) {
+        [tableView beginUpdates];
+        if (self.expandedIndexPath) {
+            if ([self respondsToSelector:@selector(tableView:didShrinkedRowCell:)]) {
+                UITableViewCell* expandingCell = [tableView cellForRowAtIndexPath:self.expandingIndexPath];
+                if (expandingCell && [expandingCell.reuseIdentifier isEqualToString:ExpandingCellIdentifier]) {
+                    [self tableView:tableView didShrinkedRowCell:expandingCell];
+                }
+            }
+            [tableView deleteRowsAtIndexPaths:@[self.expandedIndexPath] withRowAnimation:UITableViewRowAnimationRight];
+            
+        }
+        [tableView endUpdates];
+    }
+    
+    self.expandedIndexPath = nil;
+    self.expandingIndexPath = nil;
+}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // disable touch on expanded cell
